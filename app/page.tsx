@@ -1,28 +1,28 @@
+import { notion2 } from '@/lib/notion';
 import Link from 'next/link';
 
 export default async function Home() {
-  const response = await fetch(
-    `https://api.notion.com/v1/users/${process.env.NOTION_PAGE_ID}`,
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.NOTION_SECRET}`,
-        'Notion-Version': '2022-06-28',
-        'Content-Type': 'application/json',
-      },
-    }
-  );
+  const db: any = await notion2.databases.query({
+    database_id: process.env.NOTION_PORTFOLIO_DATABASE_ID!,
+  });
 
-  const data = await response.json();
+  const data = db.results;
+  const filteredResults = data.filter((result: any) => {
+    const checkboxValue = result.properties['체크박스'].checkbox;
+    return checkboxValue === true;
+  });
 
-  console.log(data);
-  // console.log(data.properties.image.files[0].file.url);
-  // const location = data.properties['날짜'].date;
-  // console.log(location);
+  // 체크박스가 체크된 결과만 필터링
+  console.log(filteredResults);
 
-  // const image = data.properties.image.files[0].file.url;
   return (
     <main>
-      {/* <img src={image} alt="portfolio" width={200} height={200} /> */}
+      <p>필터링 아이디: </p>
+      {filteredResults.map((result: any) => (
+        <>
+          <p>{result.id}</p>
+        </>
+      ))}
       <Link href="/about">About</Link>
     </main>
   );

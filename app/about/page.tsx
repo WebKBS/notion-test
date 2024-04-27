@@ -15,7 +15,6 @@ async function getData(rootPageId: string) {
 
 const About = async () => {
   const data = await getData(pageId);
-  console.log(data);
   return <NotionPage recordMap={data} rootPageId={pageId} />;
 };
 
