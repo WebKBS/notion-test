@@ -8,7 +8,7 @@ interface NotionPageProps {
   rootPageId: string;
 }
 
-export const NotionPage = ({ recordMap, rootPageId }: NotionPageProps) => {
+export const Renderer = ({ recordMap, rootPageId }: NotionPageProps) => {
   return (
     <div className="notion__container">
       <Link href="/">뒤로가기</Link>
@@ -22,3 +22,5 @@ export const NotionPage = ({ recordMap, rootPageId }: NotionPageProps) => {
     </div>
   );
 };
+
+export default Renderer;
