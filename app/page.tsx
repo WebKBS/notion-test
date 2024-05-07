@@ -1,10 +1,13 @@
+'use server';
+import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
 
 let cachedData: any = null;
 let cacheExpirationTime: any = null;
-export default async function Home() {
-  const cacheDuration = 10;
+const cacheDuration = 60 * 2 * 1000; // 2분
+console.log(Date.now(), '캐시된 데이터 반환');
 
+export default async function Home() {
   async function fetchData() {
     // 만료 시간이 지나지 않았고 캐시된 데이터가 있는 경우 캐시된 데이터를 반환
     if (cachedData && cacheExpirationTime && Date.now() < cacheExpirationTime) {
@@ -29,11 +32,15 @@ export default async function Home() {
     // 캐시 업데이트
     cachedData = data;
     cacheExpirationTime = Date.now() + cacheDuration;
+    console.log(Date.now(), cacheExpirationTime, '데이터 업데이트');
 
     return data;
   }
 
+  revalidatePath('/');
+
   // fetchData 함수를 사용하여 데이터를 가져옴
+
   fetchData()
     .then((data) => {
       console.log(data);
@@ -63,8 +70,6 @@ export default async function Home() {
   //     </main>
   //   );
   // }
-
-  // console.log(data);
 
   return (
     <main>
